@@ -18,7 +18,7 @@ export default function MainRoutes() {
         <Route path="/register" element={<Register />}></Route>
         <Route
           path="/dashboard"
-          element={user ? <Dashboard /> : <Navigate to="/login" replace />}
+          element={user ? <Dashboard /> : <Navigate to="/" replace />}
         ></Route>
       </Route>
     </Routes>

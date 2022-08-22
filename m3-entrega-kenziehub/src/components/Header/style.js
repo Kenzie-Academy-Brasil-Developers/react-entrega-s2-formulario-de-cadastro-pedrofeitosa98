@@ -16,6 +16,6 @@ export const HeaderContainer = styled.header`
     justify-content: space-between;
     align-items: center;
     width: 90%;
-    max-width: 46.375rem;
+    max-width: 48.75rem;
   }
 `

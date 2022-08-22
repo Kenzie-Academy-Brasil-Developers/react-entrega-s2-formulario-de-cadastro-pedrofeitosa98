@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, createContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
@@ -31,7 +32,6 @@ export function AuthProvider({ children }) {
       autoLogin();
     }
     setLoadingAuth(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function loginUser(formData, setLoading) {
