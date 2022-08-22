@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import { Outlet } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import { FormContainer, FormHeader } from "../Form/style";
-import Logo from "../Logo";
+import { FormContainer } from "../Form/style";
 
 export default function LoadingPage({ children }) {
   const { loadingAuth } = useContext(AuthContext);

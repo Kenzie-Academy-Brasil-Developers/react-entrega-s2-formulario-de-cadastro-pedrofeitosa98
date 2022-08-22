@@ -45,8 +45,21 @@ export function TechProvider({ children }) {
     }
   }
 
+  async function deleteTech(id, title) {
+    try {
+      const token = localStorage.getItem("@TOKEN");
+      api.defaults.headers.authorization = `Bearer ${token}`;
+      await api.delete(`users/techs/${id}`);
+      toast.success(`Tech "${title}" removida`);
+      const newList = techs.filter((tech) => tech.id !== id);
+      setTechs(newList);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
-    <TechContext.Provider value={{ techs, createTech }}>
+    <TechContext.Provider value={{ techs, createTech, deleteTech }}>
       {children}
     </TechContext.Provider>
   );
