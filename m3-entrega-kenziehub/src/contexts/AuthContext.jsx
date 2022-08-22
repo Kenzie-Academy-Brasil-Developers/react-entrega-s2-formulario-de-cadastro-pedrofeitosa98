@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
 import { useNavigate } from "react-router-dom";
@@ -6,9 +6,52 @@ import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext({});
 
 export function AuthProvider({ children }) {
-  // o useState do usuário começa vazio, pois não há ninguém logado
   const [user, setUser] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("@TOKEN");
+
+    async function autoLogin() {
+      api.defaults.headers.authorization = `Bearer ${token}`;
+
+      try {
+        const response = await api.get("profile");
+        setUser(response.data);
+        navigate("/dashboard");
+      } catch (error) {
+        console.error(error);
+        localStorage.removeItem("@TOKEN");
+        localStorage.removeItem("@USERID");
+        navigate("/login", { replace: true });
+      }
+    }
+    if (token) {
+      autoLogin();
+    }
+    setLoadingAuth(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function loginUser(formData, setLoading) {
+    try {
+      setLoading(true);
+      const response = await api.post("sessions", formData);
+      setUser(response.data.user);
+      localStorage.setItem("@USERID", response.data.user.id);
+      localStorage.setItem("@TOKEN", response.data.token);
+      api.defaults.headers.authorization = `Bearer ${response.data.token}`;
+      toast.success("Login bem sucedido!");
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 2000);
+    } catch (error) {
+      toast.error("Email ou senha incorretos.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function registerUser(formData, setLoading) {
     try {
@@ -25,38 +68,11 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function loginUser(formData, setLoading) {
-    try {
-      setLoading(true);
-      const response = await api.post("sessions", formData);
-      setUser(response.data.user);
-      localStorage.setItem("@USERID", response.data.user.id);
-      localStorage.setItem("@TOKEN", response.data.token);
-      toast.success("Login bem sucedido!");
-      setTimeout(() => {
-        navigate("/dashboard", { replace: true });
-      }, 2000);
-    } catch (error) {
-      toast.error("Email ou senha incorretos.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <AuthContext.Provider value={{ user, registerUser, loginUser }}>
+    <AuthContext.Provider
+      value={{ user, registerUser, loginUser, loadingAuth }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
-
-// POST /users - FORMATO DA REQUISIÇÃO
-
-// {
-//   "email": "johndoe@email.com",
-//   "password": "123456",
-//   "name": "John Doe",
-//   "bio": "Lorem ipsum dolor emet",
-//   "contact": "linkedin/in/johndoe",
-//   "course_module": "Segundo Módulo (Frontend avançado)"
-// }

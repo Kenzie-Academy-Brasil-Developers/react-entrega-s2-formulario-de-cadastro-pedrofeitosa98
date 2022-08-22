@@ -55,7 +55,7 @@ export default function Register() {
         <Logo />
         <button
           className="small"
-          onClick={() => navigate("/login", { replace: true })}
+          onClick={() => navigate("/", { replace: true })}
         >
           Voltar
         </button>
@@ -142,14 +142,18 @@ export default function Register() {
             id="course-module"
             {...register("course_module")}
           >
-            <option value="module1">
+            <option value="Primeiro módulo (Introdução ao Frontend)">
               Primeiro módulo (Introdução ao Frontend)
             </option>
-            <option value="module2">Segundo módulo (Frontend Avançado)</option>
-            <option value="module3">
+            <option value="Segundo módulo (Frontend Avançado)">
+              Segundo módulo (Frontend Avançado)
+            </option>
+            <option value="Terceiro módulo (Introdução ao Backend)">
               Terceiro módulo (Introdução ao Backend)
             </option>
-            <option value="module4">Quarto módulo (Backend Avançado)</option>
+            <option value="Quarto módulo (Backend Avançado)">
+              Quarto módulo (Backend Avançado)
+            </option>
           </select>
 
           {Object.keys(errors).length !== 0 ? (

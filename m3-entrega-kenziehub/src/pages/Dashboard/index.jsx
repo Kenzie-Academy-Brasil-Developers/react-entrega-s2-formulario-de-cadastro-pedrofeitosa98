@@ -1,12 +1,21 @@
 import Navbar from "../../components/Navbar";
 import Header from "../../components/Header";
 import { Main } from "./style";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function Dashboard() {
+  const { user } = useContext(AuthContext);
+
   return (
     <>
       <Navbar />
-      <Header />
+      <Header>
+        <div>
+          <h2 className="title3">Olá, {user.name}</h2>
+          <span className="helperText colorGrey1">{user.course_module}</span>
+        </div>
+      </Header>
       <Main>
         <h1 className="title1 colorGrey0">
           Que pena! Estamos em desenvolvimento
