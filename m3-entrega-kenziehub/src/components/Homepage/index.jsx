@@ -12,7 +12,7 @@ export default function Homepage() {
     navigate("/dashboard");
   }
   return (
-    <main className="formMain">
+    <main className="formMain fadeIn">
       <FormHeader>
         <Logo />
       </FormHeader>

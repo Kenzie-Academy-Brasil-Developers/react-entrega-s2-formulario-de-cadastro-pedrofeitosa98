@@ -50,7 +50,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   return (
-    <main className="formMain">
+    <main className="formMain fadeIn">
       <FormHeader>
         <Logo />
         <button

@@ -29,6 +29,16 @@ export function TechProvider({ children }) {
     }
   }, [user]);
 
+  function openModal(setModalView) {
+    setModalView(true);
+  }
+
+  function closeModal(setModalView) {
+    setTimeout(() => {
+      setModalView(false);
+    }, 0);
+  }
+
   async function createTech(formData, setLoading, setModalView) {
     try {
       setLoading(true);
@@ -41,25 +51,32 @@ export function TechProvider({ children }) {
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);
-      setModalView(false);
+      setTimeout(() => {
+        setModalView(false);
+      }, 0);
     }
   }
 
-  async function deleteTech(id, title) {
+  async function deleteTech(id, title, setOutAnimation) {
     try {
       const token = localStorage.getItem("@TOKEN");
       api.defaults.headers.authorization = `Bearer ${token}`;
       await api.delete(`users/techs/${id}`);
       toast.success(`Tech "${title}" removida`);
       const newList = techs.filter((tech) => tech.id !== id);
-      setTechs(newList);
+      setOutAnimation(true);
+      setTimeout(() => {
+        setTechs(newList);
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
   }
 
   return (
-    <TechContext.Provider value={{ techs, createTech, deleteTech }}>
+    <TechContext.Provider
+      value={{ techs, createTech, deleteTech, closeModal, openModal }}
+    >
       {children}
     </TechContext.Provider>
   );

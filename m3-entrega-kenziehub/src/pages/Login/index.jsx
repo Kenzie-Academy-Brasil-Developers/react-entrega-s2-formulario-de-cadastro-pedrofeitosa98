@@ -37,7 +37,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   return (
-    <main className="formMain">
+    <main className="formMain fadeIn">
       <FormHeader>
         <Logo />
       </FormHeader>

@@ -10,22 +10,25 @@ import { TechContext } from "../../contexts/TechContext";
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
-  const { techs } = useContext(TechContext);
+  const { techs, openModal } = useContext(TechContext);
   const [modalView, setModalView] = useState(false);
 
   return (
     <>
       <Navbar />
       <Header>
-        <div>
+        <div className="fadeIn">
           <h1 className="title1">Olá, {user.name}</h1>
           <span className="headline bold colorGrey1">{user.course_module}</span>
         </div>
       </Header>
-      <Main>
+      <Main className="fadeIn">
         <div className="listHeader">
           <h2 className="title2 colorGrey0">Tecnologias</h2>
-          <button className="icon primary" onClick={() => setModalView(true)}>
+          <button
+            className="icon primary"
+            onClick={() => openModal(setModalView)}
+          >
             <FaPlus />
           </button>
         </div>
@@ -35,7 +38,11 @@ export default function Dashboard() {
           })}
         </TechList>
       </Main>
-      {modalView ? <TechModal setModalView={setModalView} /> : <></>}
+      {modalView ? (
+        <TechModal modalView={modalView} setModalView={setModalView} />
+      ) : (
+        <></>
+      )}
     </>
   );
 }

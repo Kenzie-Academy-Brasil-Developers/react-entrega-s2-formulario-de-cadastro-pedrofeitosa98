@@ -7,9 +7,9 @@ import * as yup from "yup";
 import { useContext, useState } from "react";
 import { TechContext } from "../../contexts/TechContext";
 
-export default function TechModal({ setModalView }) {
+export default function TechModal({ modalView, setModalView }) {
   const [loading, setLoading] = useState(false);
-  const { createTech } = useContext(TechContext);
+  const { createTech, closeModal } = useContext(TechContext);
   const schema = yup.object().shape({
     title: yup.string().required("Campo obrigatório"),
   });
@@ -21,54 +21,56 @@ export default function TechModal({ setModalView }) {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
+  console.log("TechModal", modalView);
   return (
     <ModalContainer>
-      <ModalHeader>
-        <h3 className="title2">Adicionar tecnologia</h3>
-        <button className="icon" onClick={() => setModalView(false)}>
-          <FaTimes />
-        </button>
-      </ModalHeader>
-      <ModalFormContainer>
-        <Form
-          onSubmit={handleSubmit((formData) =>
-            createTech(formData, setLoading, setModalView)
-          )}
-        >
-          <label className="headline" htmlFor="title">
-            Nome
-          </label>
-          <input
-            type="text"
-            id="title"
-            placeholder="Nome da tecnologia"
-            {...register("title")}
-          />
-          <Error>{errors.title?.message}</Error>
-          <label className="headline" htmlFor="status">
-            Selecionar status
-          </label>
-          <select name="status" id="status" {...register("status")}>
-            <option value="Iniciante">Iniciante</option>
-            <option value="Intermediário">Intermediário</option>
-            <option value="Avançado">Avançado</option>
-          </select>
+      <div className={modalView ? "bounceInUp" : "bounceOutDown"}>
+        <ModalHeader>
+          <h3 className="title2">Adicionar tecnologia</h3>
+          <button className="icon" onClick={() => closeModal(setModalView)}>
+            <FaTimes />
+          </button>
+        </ModalHeader>
+        <ModalFormContainer>
+          <Form
+            onSubmit={handleSubmit((formData) =>
+              createTech(formData, setLoading, setModalView)
+            )}
+          >
+            <label className="headline" htmlFor="title">
+              Nome
+            </label>
+            <input
+              type="text"
+              id="title"
+              placeholder="Nome da tecnologia"
+              {...register("title")}
+            />
+            <Error>{errors.title?.message}</Error>
+            <label className="headline" htmlFor="status">
+              Selecionar status
+            </label>
+            <select name="status" id="status" {...register("status")}>
+              <option value="Iniciante">Iniciante</option>
+              <option value="Intermediário">Intermediário</option>
+              <option value="Avançado">Avançado</option>
+            </select>
 
-          {Object.keys(errors).length !== 0 ? (
-            <button className="big primary negative" type="submit">
-              Cadastrar Tecnologia
-            </button>
-          ) : (
-            <button
-              className={loading ? "big primary negative" : "big primary"}
-              type="submit"
-            >
-              {loading ? "Cadastrando..." : "Cadastrar Tecnologia"}
-            </button>
-          )}
-        </Form>
-      </ModalFormContainer>
+            {Object.keys(errors).length !== 0 ? (
+              <button className="big primary negative" type="submit">
+                Cadastrar Tecnologia
+              </button>
+            ) : (
+              <button
+                className={loading ? "big primary negative" : "big primary"}
+                type="submit"
+              >
+                {loading ? "Cadastrando..." : "Cadastrar Tecnologia"}
+              </button>
+            )}
+          </Form>
+        </ModalFormContainer>
+      </div>
     </ModalContainer>
   );
 }

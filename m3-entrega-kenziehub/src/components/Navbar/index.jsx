@@ -8,7 +8,7 @@ export default function Navbar() {
   const { logoutUser } = useContext(AuthContext);
 
   return (
-    <nav>
+    <nav className="fadeIn">
       <NavContainer>
         <div>
           <Logo />

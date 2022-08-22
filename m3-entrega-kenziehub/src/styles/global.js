@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import "./typography.css"
 import "./components.css"
+import "./animations.css"
 
 const GlobalStyle = createGlobalStyle`
   :root {
