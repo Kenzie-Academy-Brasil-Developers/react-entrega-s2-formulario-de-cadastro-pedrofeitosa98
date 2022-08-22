@@ -68,9 +68,18 @@ export function AuthProvider({ children }) {
     }
   }
 
+  function logoutUser() {
+    localStorage.removeItem("@TOKEN");
+    localStorage.removeItem("@USERID");
+    toast.info("Usuário deslogado.");
+    setTimeout(() => {
+      navigate("/", { replace: true });
+    }, 2000);
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, registerUser, loginUser, loadingAuth }}
+      value={{ user, registerUser, loginUser, loadingAuth, logoutUser }}
     >
       {children}
     </AuthContext.Provider>
