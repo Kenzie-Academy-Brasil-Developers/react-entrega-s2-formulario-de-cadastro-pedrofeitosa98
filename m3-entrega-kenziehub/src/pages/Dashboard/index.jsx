@@ -7,7 +7,8 @@ import TechnologyCard from "../../components/TechnologyCard";
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
-
+  console.log("teste do dashboard", user);
+  console.log("teste de tecnologias", user.techs);
   return (
     <>
       <Navbar />
@@ -23,8 +24,8 @@ export default function Dashboard() {
           <button className="icon">+</button>
         </div>
         <TechList>
-          {user.techs.map((tech, index) => {
-            return <TechnologyCard key={tech.id} index={index} />;
+          {user.techs.map((tech) => {
+            return <TechnologyCard key={tech.id} tech={tech} />;
           })}
         </TechList>
       </Main>
