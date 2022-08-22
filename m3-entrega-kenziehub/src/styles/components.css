@@ -14,6 +14,7 @@ button {
   justify-content: center;
   align-items: center;
   text-align: center;
+  gap: 0.4rem;
   width: fit-content;
   height: 3rem;
   padding: .625rem 1.25rem;

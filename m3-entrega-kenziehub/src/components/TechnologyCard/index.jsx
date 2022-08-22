@@ -1,8 +1,7 @@
 import { CardContainer, LeftContainer, RightContainer } from "./style";
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function TechnologyCard({ tech }) {
-  console.log("teste da props tech", tech);
-
   return (
     <>
       <CardContainer>
@@ -11,7 +10,9 @@ export default function TechnologyCard({ tech }) {
         </LeftContainer>
         <RightContainer>
           <span className="headline colorGrey1">{tech.status}</span>
-          <button className="icon">-</button>
+          <button className="icon">
+            <FaTrashAlt />
+          </button>
         </RightContainer>
       </CardContainer>
     </>

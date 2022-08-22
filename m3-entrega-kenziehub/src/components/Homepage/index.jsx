@@ -3,6 +3,7 @@ import Logo from "../Logo";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { FaSignInAlt, FaUserPlus } from "react-icons/fa";
 
 export default function Homepage() {
   const navigate = useNavigate();
@@ -21,13 +22,13 @@ export default function Homepage() {
           className="big primary"
           onClick={() => navigate("/login", { replace: true })}
         >
-          Login
+          <FaSignInAlt /> Login
         </button>
         <button
           className="big primary"
           onClick={() => navigate("/register", { replace: true })}
         >
-          Cadastro
+          <FaUserPlus /> Cadastro
         </button>
       </FormContainer>
     </main>

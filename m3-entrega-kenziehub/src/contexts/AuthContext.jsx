@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
         setUser(response.data);
         navigate("/dashboard");
       } catch (error) {
-        console.error(error);
+        console.error("autoLogin", error);
         localStorage.removeItem("@TOKEN");
         localStorage.removeItem("@USERID");
         navigate("/login", { replace: true });
@@ -60,7 +60,7 @@ export function AuthProvider({ children }) {
       toast.success("Usuário cadastrado com sucesso!");
       setTimeout(() => {
         navigate("/login", { replace: true });
-      }, 2000);
+      }, 1000);
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
@@ -69,12 +69,14 @@ export function AuthProvider({ children }) {
   }
 
   function logoutUser() {
-    localStorage.removeItem("@TOKEN");
-    localStorage.removeItem("@USERID");
-    toast.info("Usuário deslogado.");
-    setTimeout(() => {
+    try {
+      localStorage.removeItem("@TOKEN");
+      localStorage.removeItem("@USERID");
+      toast.info("Usuário deslogado.");
       navigate("/", { replace: true });
-    }, 2000);
+    } catch (error) {
+      console.error("logoutUser", error);
+    }
   }
 
   return (

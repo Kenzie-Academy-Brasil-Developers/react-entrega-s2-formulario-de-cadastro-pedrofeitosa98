@@ -81,7 +81,7 @@ const GlobalStyle = createGlobalStyle`
   input:focus,
   textarea:focus,
   select:focus {
-    border: 1.5px solid var(--grey-1);
+    border: 2px solid var(--grey-1);
   }
 
   ::placeholder {

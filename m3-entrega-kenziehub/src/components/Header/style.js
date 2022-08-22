@@ -15,6 +15,8 @@ export const HeaderContainer = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    row-gap: .5rem;
     width: 90%;
     max-width: 48.75rem;
   }

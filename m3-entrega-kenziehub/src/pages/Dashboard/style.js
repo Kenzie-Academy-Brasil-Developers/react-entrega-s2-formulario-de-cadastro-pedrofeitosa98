@@ -27,4 +27,5 @@ export const TechList = styled.ul`
   padding: 1.5rem;
   background-color: var(--grey-3);
   border-radius: 4px;
+  margin-bottom: 2rem;
 `

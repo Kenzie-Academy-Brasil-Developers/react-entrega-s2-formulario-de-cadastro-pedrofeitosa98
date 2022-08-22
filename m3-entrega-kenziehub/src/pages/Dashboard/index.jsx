@@ -1,14 +1,18 @@
 import Navbar from "../../components/Navbar";
 import Header from "../../components/Header";
 import { Main, TechList } from "./style";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import TechnologyCard from "../../components/TechnologyCard";
+import { FaPlus } from "react-icons/fa";
+import TechModal from "../../components/TechModal";
+import { TechContext } from "../../contexts/TechContext";
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
-  console.log("teste do dashboard", user);
-  console.log("teste de tecnologias", user.techs);
+  const { techs } = useContext(TechContext);
+  const [modalView, setModalView] = useState(false);
+
   return (
     <>
       <Navbar />
@@ -21,14 +25,17 @@ export default function Dashboard() {
       <Main>
         <div className="listHeader">
           <h2 className="title2 colorGrey0">Tecnologias</h2>
-          <button className="icon">+</button>
+          <button className="icon primary" onClick={() => setModalView(true)}>
+            <FaPlus />
+          </button>
         </div>
         <TechList>
-          {user.techs.map((tech) => {
+          {techs.map((tech) => {
             return <TechnologyCard key={tech.id} tech={tech} />;
           })}
         </TechList>
       </Main>
+      {modalView ? <TechModal setModalView={setModalView} /> : <></>}
     </>
   );
 }
