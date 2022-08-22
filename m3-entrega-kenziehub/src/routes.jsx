@@ -7,9 +7,9 @@ export default function MainRoutes() {
   return (
     <Routes>
       <Route path="/">
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />}></Route>
       </Route>
     </Routes>
   );

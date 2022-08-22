@@ -9,16 +9,23 @@ import {
   Error,
 } from "../../components/Form/style";
 import Logo from "../../components/Logo";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
-const schema = yup.object().shape({
-  email: yup.string().email("Deve ser um email").required("Campo obrigatório"),
-  password: yup
-    .string()
-    .min(8, "Mínimo 8 caracteres")
-    .required("Campo obrigatório"),
-});
+export default function Login() {
+  const [loading, setLoading] = useState(false);
+  const { loginUser } = useContext(AuthContext);
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Deve ser um email")
+      .required("Campo obrigatório"),
+    password: yup
+      .string()
+      .min(8, "Mínimo 8 caracteres")
+      .required("Campo obrigatório"),
+  });
 
-function Login() {
   const {
     register,
     handleSubmit,
@@ -29,12 +36,6 @@ function Login() {
 
   const navigate = useNavigate();
 
-  function loginUser(data) {
-    console.log(data);
-
-    navigate("/dashboard", { replace: true });
-  }
-
   return (
     <main className="formMain">
       <FormHeader>
@@ -42,7 +43,9 @@ function Login() {
       </FormHeader>
       <FormContainer>
         <h1 className="title1">Login</h1>
-        <Form onSubmit={handleSubmit(loginUser)}>
+        <Form
+          onSubmit={handleSubmit((formData) => loginUser(formData, setLoading))}
+        >
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -61,11 +64,10 @@ function Login() {
           />
           <Error>{errors.password?.message}</Error>
           <button
-            className="big primary"
+            className={loading ? "big primary negative" : "big primary"}
             type="submit"
-            // onClick={() => navigate("/dashboard", { replace: true })}
           >
-            Entrar
+            {loading ? "Entrando..." : "Entrar"}
           </button>
         </Form>
         <p className="headline colorGrey1">Ainda não possui uma conta?</p>
@@ -79,5 +81,3 @@ function Login() {
     </main>
   );
 }
-
-export default Login;

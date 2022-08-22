@@ -9,28 +9,36 @@ import {
   Error,
 } from "../../components/Form/style";
 import Logo from "../../components/Logo";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
-const schema = yup.object({
-  name: yup.string().required("Campo obrigatório"),
-  email: yup.string().email("Deve ser um email").required("Campo obrigatório"),
-  password: yup
-    .string()
-    .matches(/[A-Z]/, "Deve conter ao menos 1 letra maiúscula")
-    .matches(/([a-z])/, "Deve conter ao menos 1 letra minúscula")
-    .matches(/(\d)/, "Deve conter ao menos 1 número")
-    .matches(/(\W)|_/, "Deve conter ao menos 1 caracter especial")
-    .matches(/.{8,}/, "Deve conter ao menos 8 dígitos")
-    .required("Campo obrigatório"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "As senhas não são iguais")
-    .required("Campo obrigatório"),
-  bio: yup.string().required("Campo obrigatório"),
-  contact: yup.string().required("Campo obrigatório"),
-  courseModule: yup.string().required("Campo obrigatório"),
-});
+export default function Register() {
+  const [loading, setLoading] = useState(false);
+  const { registerUser } = useContext(AuthContext);
 
-function Register() {
+  const schema = yup.object().shape({
+    name: yup.string().required("Campo obrigatório"),
+    email: yup
+      .string()
+      .email("Deve ser um email")
+      .required("Campo obrigatório"),
+    password: yup
+      .string()
+      .matches(/[A-Z]/, "Deve conter ao menos 1 letra maiúscula")
+      .matches(/([a-z])/, "Deve conter ao menos 1 letra minúscula")
+      .matches(/(\d)/, "Deve conter ao menos 1 número")
+      .matches(/(\W)|_/, "Deve conter ao menos 1 caracter especial")
+      .matches(/.{8,}/, "Deve conter ao menos 8 dígitos")
+      .required("Campo obrigatório"),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password")], "As senhas não são iguais")
+      .required("Campo obrigatório"),
+    bio: yup.string().required("Campo obrigatório"),
+    contact: yup.string().required("Campo obrigatório"),
+    course_module: yup.string().required("Campo obrigatório"),
+  });
+
   const {
     register,
     handleSubmit,
@@ -40,10 +48,6 @@ function Register() {
   });
 
   const navigate = useNavigate();
-
-  function registerUser(data) {
-    navigate("/login", { replace: true });
-  }
 
   return (
     <main className="formMain">
@@ -59,7 +63,11 @@ function Register() {
       <FormContainer>
         <h1 className="title1">Crie sua conta</h1>
         <p className="headline colorGrey1">Rápido e grátis, vamos nessa!</p>
-        <Form onSubmit={handleSubmit(registerUser)}>
+        <Form
+          onSubmit={handleSubmit((formData) =>
+            registerUser(formData, setLoading)
+          )}
+        >
           <label className="headline" htmlFor="name">
             Nome
           </label>
@@ -132,11 +140,16 @@ function Register() {
           <select
             name="course-module"
             id="course-module"
-            {...register("courseModule")}
+            {...register("course_module")}
           >
-            <option value="primeiroModulo">Primeiro Módulo</option>
-            <option value="segundoModulo">Segundo Módulo</option>
-            <option value="terceiroModulo">Terceiro Módulo</option>
+            <option value="module1">
+              Primeiro módulo (Introdução ao Frontend)
+            </option>
+            <option value="module2">Segundo módulo (Frontend Avançado)</option>
+            <option value="module3">
+              Terceiro módulo (Introdução ao Backend)
+            </option>
+            <option value="module4">Quarto módulo (Backend Avançado)</option>
           </select>
 
           {Object.keys(errors).length !== 0 ? (
@@ -144,8 +157,11 @@ function Register() {
               Cadastrar
             </button>
           ) : (
-            <button className="big primary" type="submit">
-              Cadastrar
+            <button
+              className={loading ? "big primary negative" : "big primary"}
+              type="submit"
+            >
+              {loading ? "Cadastrando..." : "Cadastrar-se"}
             </button>
           )}
         </Form>
@@ -153,5 +169,3 @@ function Register() {
     </main>
   );
 }
-
-export default Register;
