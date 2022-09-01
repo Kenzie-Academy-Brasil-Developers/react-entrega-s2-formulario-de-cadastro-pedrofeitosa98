@@ -1,13 +1,38 @@
-import { useState, createContext, useEffect, useContext } from "react";
+import { useState, createContext, useEffect, useContext, ReactNode } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
 import { AuthContext } from "./AuthContext";
 
-export const TechContext = createContext({});
+interface ITechProviderProps {
+  children: ReactNode,
+}
 
-export function TechProvider({ children }) {
+interface ITech {
+  id: string,
+  title: string,
+  status: string,
+  created_at: string,
+  updated_at: string,
+}
+
+interface ITechForm {
+  title: string,
+  status: string,
+}
+
+interface ITechContext {
+  techs: ITech[],
+  createTech: (formData: ITech, setLoading: React.Dispatch<React.SetStateAction<boolean>>, setModalView: React.Dispatch<React.SetStateAction<boolean>>) => void,
+  deleteTech: (id: string, title: string, setOutAnimation: React.Dispatch<React.SetStateAction<boolean>>) => void,
+  closeModal: (setModalView: React.Dispatch<React.SetStateAction<boolean>>) => void,
+  openModal: (setModalView: React.Dispatch<React.SetStateAction<boolean>>) => void,
+}
+
+export const TechContext = createContext<ITechContext>({} as ITechContext);
+
+export function TechProvider({ children }: ITechProviderProps) {
   const { user } = useContext(AuthContext);
-  const [techs, setTechs] = useState(null);
+  const [techs, setTechs] = useState<ITech[]>([] as ITech[]);
 
   useEffect(() => {
     const token = localStorage.getItem("@TOKEN");
@@ -29,17 +54,17 @@ export function TechProvider({ children }) {
     }
   }, [user]);
 
-  function openModal(setModalView) {
+  function openModal(setModalView: React.Dispatch<React.SetStateAction<boolean>>) {
     setModalView(true);
   }
 
-  function closeModal(setModalView) {
+  function closeModal(setModalView: React.Dispatch<React.SetStateAction<boolean>>) {
     setTimeout(() => {
       setModalView(false);
     }, 0);
   }
 
-  async function createTech(formData, setLoading, setModalView) {
+  async function createTech(formData: ITechForm, setLoading: React.Dispatch<React.SetStateAction<boolean>>, setModalView: React.Dispatch<React.SetStateAction<boolean>>) {
     try {
       setLoading(true);
       const token = localStorage.getItem("@TOKEN");
@@ -47,7 +72,7 @@ export function TechProvider({ children }) {
       const response = await api.post("users/techs", formData);
       setTechs([...techs, response.data]);
       toast.success("Tech adicionada com sucesso!");
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);
@@ -57,7 +82,7 @@ export function TechProvider({ children }) {
     }
   }
 
-  async function deleteTech(id, title, setOutAnimation) {
+  async function deleteTech(id: string, title: string, setOutAnimation: React.Dispatch<React.SetStateAction<boolean>>) {
     try {
       const token = localStorage.getItem("@TOKEN");
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
