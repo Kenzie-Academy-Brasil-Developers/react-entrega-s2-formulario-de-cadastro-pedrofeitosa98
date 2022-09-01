@@ -20,13 +20,13 @@ export default function Homepage() {
         <h1 className="title1">Bem-vindo!</h1>
         <button
           className="big primary"
-          onClick={() => navigate("/login", { replace: true })}
+          onClick={() => navigate("/login")}
         >
           <FaSignInAlt /> Login
         </button>
         <button
           className="big primary"
-          onClick={() => navigate("/register", { replace: true })}
+          onClick={() => navigate("/register")}
         >
           <FaUserPlus /> Cadastro
         </button>

@@ -11,7 +11,7 @@ import { TechContext } from "../../contexts/TechContext";
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
   const { techs, openModal } = useContext(TechContext);
-  const [modalView, setModalView] = useState(false);
+  const [modalView, setModalView] = useState<boolean>(false);
 
   return (
     <>

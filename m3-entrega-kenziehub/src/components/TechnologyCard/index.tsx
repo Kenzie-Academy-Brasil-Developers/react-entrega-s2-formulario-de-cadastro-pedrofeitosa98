@@ -2,9 +2,13 @@
 import { CardContainer, LeftContainer, RightContainer } from "./style";
 import { FaTrashAlt } from "react-icons/fa";
 import { useContext, useState } from "react";
-import { TechContext } from "../../contexts/TechContext";
+import { ITech, TechContext } from "../../contexts/TechContext";
 
-export default function TechnologyCard({ tech }) {
+interface ITechCard {
+  tech: ITech
+}
+
+export default function TechnologyCard({ tech }:ITechCard) {
   const { deleteTech } = useContext(TechContext);
   const [outAnimation, setOutAnimation] = useState(false);
 

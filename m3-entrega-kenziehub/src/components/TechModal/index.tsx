@@ -5,9 +5,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useContext, useState } from "react";
-import { TechContext } from "../../contexts/TechContext";
+import { TechContext, ITechForm } from "../../contexts/TechContext";
 
-export default function TechModal({ modalView, setModalView }) {
+interface IModalProps {
+  modalView: boolean,
+  setModalView: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+export default function TechModal({ modalView, setModalView }:IModalProps) {
   const [loading, setLoading] = useState(false);
   const { createTech, closeModal } = useContext(TechContext);
   const schema = yup.object().shape({
@@ -18,10 +23,10 @@ export default function TechModal({ modalView, setModalView }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<ITechForm>({
     resolver: yupResolver(schema),
   });
-  console.log("TechModal", modalView);
+
   return (
     <ModalContainer>
       <div className={modalView ? "bounceInUp" : "bounceOutDown"}>
@@ -50,7 +55,7 @@ export default function TechModal({ modalView, setModalView }) {
             <label className="headline" htmlFor="status">
               Selecionar status
             </label>
-            <select name="status" id="status" {...register("status")}>
+            <select id="status" {...register("status")}>
               <option value="Iniciante">Iniciante</option>
               <option value="Intermediário">Intermediário</option>
               <option value="Avançado">Avançado</option>

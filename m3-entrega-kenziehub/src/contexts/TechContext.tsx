@@ -24,14 +24,14 @@ export interface IWork {
   updated_at: Date,
 }
 
-interface ITechForm {
+export interface ITechForm {
   title: string,
   status: string,
 }
 
 interface ITechContext {
   techs: ITech[],
-  createTech: (formData: ITech, setLoading: React.Dispatch<React.SetStateAction<boolean>>, setModalView: React.Dispatch<React.SetStateAction<boolean>>) => void,
+  createTech: (formData: ITechForm, setLoading: React.Dispatch<React.SetStateAction<boolean>>, setModalView: React.Dispatch<React.SetStateAction<boolean>>) => void,
   deleteTech: (id: string, title: string, setOutAnimation: React.Dispatch<React.SetStateAction<boolean>>) => void,
   closeModal: (setModalView: React.Dispatch<React.SetStateAction<boolean>>) => void,
   openModal: (setModalView: React.Dispatch<React.SetStateAction<boolean>>) => void,
