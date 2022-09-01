@@ -1,18 +1,27 @@
 import { useState, createContext, useEffect, useContext, ReactNode } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
-import { AuthContext } from "./AuthContext";
+import { AuthContext, IUser } from "./AuthContext";
 
 interface ITechProviderProps {
   children: ReactNode,
 }
 
-interface ITech {
+export interface ITech {
   id: string,
   title: string,
   status: string,
-  created_at: string,
-  updated_at: string,
+  created_at: Date,
+  updated_at: Date,
+}
+
+export interface IWork {
+  id: string,
+  title: string,
+  description: string,
+  deploy_url: string,
+  created_at: Date,
+  updated_at: Date,
 }
 
 interface ITechForm {
@@ -40,7 +49,7 @@ export function TechProvider({ children }: ITechProviderProps) {
     async function getTechs() {
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
       try {
-        const response = await api.get("profile");
+        const response = await api.get<IUser>("profile");
         setTechs(response.data.techs);
       } catch (error) {
         console.error(error);
@@ -72,8 +81,8 @@ export function TechProvider({ children }: ITechProviderProps) {
       const response = await api.post("users/techs", formData);
       setTechs([...techs, response.data]);
       toast.success("Tech adicionada com sucesso!");
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+    } catch (error) {
+      toast.error("Essa tech já existe, tente adicionar outra.");
     } finally {
       setLoading(false);
       setTimeout(() => {

@@ -3,22 +3,23 @@ import React, { useState, createContext, useEffect, ReactNode } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { ITech, IWork } from "./TechContext";
 
 interface IAuthProviderProps {
   children: ReactNode,
 }
 
-interface IUser {
+export interface IUser {
   id: string,
   name: string,
   email: string,
   course_module: string,
   bio: string,
   contact: string,
-  created_at: string,
-  updated_at: string,
-  techs: string[],
-  works: string[] | null,
+  created_at: Date,
+  updated_at: Date,
+  techs: ITech[],
+  works: IWork[] | null,
   avatar_url: null,
 }
 
@@ -35,6 +36,11 @@ interface IFormRegister {
 interface IFormLogin {
   email: string,
   password: string,
+}
+
+interface ISessionsResponse {
+  user: IUser,
+  token: string,
 }
 
 interface IAuthContext {
@@ -59,7 +65,7 @@ export function AuthProvider({ children }: IAuthProviderProps) {
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
       try {
-        const response = await api.get("profile");
+        const response = await api.get<IUser>("profile");
         setUser(response.data);
         navigate("/dashboard");
       } catch (error) {
@@ -78,7 +84,7 @@ export function AuthProvider({ children }: IAuthProviderProps) {
   async function loginUser(formData: IFormLogin, setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
     try {
       setLoading(true);
-      const response = await api.post("sessions", formData);
+      const response = await api.post<ISessionsResponse>("sessions", formData);
       setUser(response.data.user);
       localStorage.setItem("@USERID", response.data.user.id);
       localStorage.setItem("@TOKEN", response.data.token);
@@ -97,13 +103,13 @@ export function AuthProvider({ children }: IAuthProviderProps) {
   async function registerUser(formData: IFormRegister, setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
     try {
       setLoading(true);
-      await api.post("users", formData);
+      await api.post<IUser>("users", formData);
       toast.success("Usuário cadastrado com sucesso!");
       setTimeout(() => {
         navigate("/login", { replace: true });
       }, 1000);
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+    } catch (error) {
+      toast.error("Algo deu errado, confira os campos novamente.");
     } finally {
       setLoading(false);
     }
