@@ -1,21 +1,62 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect, ReactNode } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-export const AuthContext = createContext({});
+interface IAuthProviderProps {
+  children: ReactNode,
+}
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loadingAuth, setLoadingAuth] = useState(true);
+interface IUser {
+  id: string,
+  name: string,
+  email: string,
+  course_module: string,
+  bio: string,
+  contact: string,
+  created_at: string,
+  updated_at: string,
+  techs: string[],
+  works: string[] | null,
+  avatar_url: null,
+}
+
+interface IFormRegister {
+  name: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+  bio: string,
+  contact: string,
+  course_module: string,
+}
+
+interface IFormLogin {
+  email: string,
+  password: string,
+}
+
+interface IAuthContext {
+  user: IUser | null,
+  registerUser: (formData: IFormRegister, setLoading: React.Dispatch<React.SetStateAction<boolean>>) => void,
+  loginUser: (formData: IFormLogin, setLoading: React.Dispatch<React.SetStateAction<boolean>>) => void,
+  logoutUser: () => void,
+  loadingAuth: boolean,
+}
+
+export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
+
+export function AuthProvider({ children }: IAuthProviderProps) {
+  const [user, setUser] = useState<IUser | null>(null);
+  const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("@TOKEN");
 
     async function autoLogin() {
-      api.defaults.headers.authorization = `Bearer ${token}`;
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
       try {
         const response = await api.get("profile");
@@ -34,14 +75,14 @@ export function AuthProvider({ children }) {
     setLoadingAuth(false);
   }, []);
 
-  async function loginUser(formData, setLoading) {
+  async function loginUser(formData: IFormLogin, setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
     try {
       setLoading(true);
       const response = await api.post("sessions", formData);
       setUser(response.data.user);
       localStorage.setItem("@USERID", response.data.user.id);
       localStorage.setItem("@TOKEN", response.data.token);
-      api.defaults.headers.authorization = `Bearer ${response.data.token}`;
+      api.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
       toast.success("Login bem sucedido!");
       setTimeout(() => {
         navigate("/dashboard", { replace: true });
@@ -53,7 +94,7 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function registerUser(formData, setLoading) {
+  async function registerUser(formData: IFormRegister, setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
     try {
       setLoading(true);
       await api.post("users", formData);
@@ -61,7 +102,7 @@ export function AuthProvider({ children }) {
       setTimeout(() => {
         navigate("/login", { replace: true });
       }, 1000);
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);

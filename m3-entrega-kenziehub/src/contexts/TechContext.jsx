@@ -13,7 +13,7 @@ export function TechProvider({ children }) {
     const token = localStorage.getItem("@TOKEN");
 
     async function getTechs() {
-      api.defaults.headers.authorization = `Bearer ${token}`;
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
       try {
         const response = await api.get("profile");
         setTechs(response.data.techs);
@@ -43,7 +43,7 @@ export function TechProvider({ children }) {
     try {
       setLoading(true);
       const token = localStorage.getItem("@TOKEN");
-      api.defaults.headers.authorization = `Bearer ${token}`;
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
       const response = await api.post("users/techs", formData);
       setTechs([...techs, response.data]);
       toast.success("Tech adicionada com sucesso!");
@@ -60,7 +60,7 @@ export function TechProvider({ children }) {
   async function deleteTech(id, title, setOutAnimation) {
     try {
       const token = localStorage.getItem("@TOKEN");
-      api.defaults.headers.authorization = `Bearer ${token}`;
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
       await api.delete(`users/techs/${id}`);
       toast.success(`Tech "${title}" removida`);
       const newList = techs.filter((tech) => tech.id !== id);

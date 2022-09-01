@@ -8,7 +8,7 @@ import GlobalStyle from './styles/global';
 import { AuthProvider } from './contexts/AuthContext';
 import { TechProvider } from './contexts/TechContext';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
