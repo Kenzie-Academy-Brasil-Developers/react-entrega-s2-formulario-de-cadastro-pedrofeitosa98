@@ -18,8 +18,8 @@ export default function Dashboard() {
       <Navbar />
       <Header>
         <div className="fadeIn">
-          <h1 className="title1">Olá, {user.name}</h1>
-          <span className="headline bold colorGrey1">{user.course_module}</span>
+          <h1 className="title1">Olá, {user?.name}</h1>
+          <span className="headline bold colorGrey1">{user?.course_module}</span>
         </div>
       </Header>
       <Main className="fadeIn">

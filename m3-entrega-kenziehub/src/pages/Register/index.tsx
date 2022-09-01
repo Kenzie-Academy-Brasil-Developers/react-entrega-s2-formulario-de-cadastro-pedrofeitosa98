@@ -10,7 +10,7 @@ import {
 } from "../../components/Form/style";
 import Logo from "../../components/Logo";
 import { useContext, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext, IFormRegister } from "../../contexts/AuthContext";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ export default function Register() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<IFormRegister>({
     resolver: yupResolver(schema),
   });
 
@@ -138,7 +138,6 @@ export default function Register() {
             Selecionar Módulo
           </label>
           <select
-            name="course-module"
             id="course-module"
             {...register("course_module")}
           >

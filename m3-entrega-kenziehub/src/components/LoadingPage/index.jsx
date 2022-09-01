@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { FormContainer } from "../Form/style";
 
-export default function LoadingPage({ children }) {
+export default function LoadingPage() {
   const { loadingAuth } = useContext(AuthContext);
   return (
     <>

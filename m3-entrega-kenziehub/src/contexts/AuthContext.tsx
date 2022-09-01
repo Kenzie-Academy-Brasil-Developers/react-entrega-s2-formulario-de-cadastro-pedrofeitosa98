@@ -23,7 +23,7 @@ export interface IUser {
   avatar_url: null,
 }
 
-interface IFormRegister {
+export interface IFormRegister {
   name: string,
   email: string,
   password: string,
@@ -33,7 +33,7 @@ interface IFormRegister {
   course_module: string,
 }
 
-interface IFormLogin {
+export interface IFormLogin {
   email: string,
   password: string,
 }

@@ -10,7 +10,7 @@ import {
 } from "../../components/Form/style";
 import Logo from "../../components/Logo";
 import { useContext, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext, IFormLogin } from "../../contexts/AuthContext";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<IFormLogin>({
     resolver: yupResolver(schema),
   });
 
